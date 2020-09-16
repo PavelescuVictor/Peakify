@@ -8,8 +8,8 @@ Vue application used for searching through the NASA Images and Videos Library an
 
 ## APIs: 
 
-NASA Image and Video Library API
-Mars Rover Photos
+- NASA Image and Video Library API,
+- Mars Rover Photos,
 
 ## Stack: 
 
