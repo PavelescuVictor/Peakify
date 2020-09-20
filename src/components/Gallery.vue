@@ -6,28 +6,38 @@
                 <input type="text" placeholder="Type here the topic" v-model="topic" />
             </form>
             <div class="gallery__items">
-                <GalleryItem v-for="image in images" :key="image.data[0].nasa_id" :image_link="image.href"/>
+                <GalleryItem
+                    v-for="image in images"
+                    :key="image.data[0].nasa_id"
+                    :imageLink="image.href"
+                    @activeGalleryItem="activeGalleryItem"
+                    :itemActive="itemActive"
+                />
             </div>
         </div>
     </div>
 </template>
 
 <script>
-import axios from 'axios';
-import GalleryItem from './GalleryItem.vue';
+import axios from "axios";
+import GalleryItem from "./GalleryItem.vue";
 export default {
     name: "Gallery",
-    data () {
+    data() {
         return {
-            topic: '',
+            topic: "",
             images: [],
-        }
+            itemActive: false,
+        };
     },
     components: {
         GalleryItem,
     },
     methods: {
-        getContent(){
+        activeGalleryItem() {
+            this.itemActive = !this.itemActive;
+        },
+        getContent() {
             /*
             let date = new Date();
             let currentDay = date.getDate();
@@ -39,15 +49,19 @@ export default {
             });
             console.log(`https://api.nasa.gov/mars-photos/api/v1/rovers/${ query }/photos?api_key=DEMO_KEY&earth_date=${currentYear}-${currentMonth}-${currentDay}`);
             */
-           axios.get(`https://images-api.nasa.gov/search?title=${this.topic}&media_type=image`).then(response => {
-               this.images = response.data.collection.items
-               //console.log(response.data.collection.items);
-               //console.log(response.data.collection.items[0].data[0].nasa_id);
-               //console.log(response.data.collection.items[0].href);
-           });
+            axios
+                .get(
+                    `https://images-api.nasa.gov/search?title=${this.topic}&media_type=image`
+                )
+                .then((response) => {
+                    this.images = response.data.collection.items;
+                    console.log(response.data.collection.items);
+                    //console.log(response.data.collection.items[0].data[0].nasa_id);
+                    //console.log(response.data.collection.items[0].href);
+                });
         },
-    }
-}
+    },
+};
 </script>
 
 <style scooped>
@@ -55,7 +69,7 @@ export default {
     height: 100%;
     width: 90%;
     margin: auto;
-    background: #fff; 
+    background: #fff;
     display: flex;
     justify-content: center;
     border-radius: 15px;
@@ -68,7 +82,7 @@ export default {
     background: #fff;
 }
 
-p{
+p {
     padding: 2rem;
     font-size: 2rem;
 }
@@ -77,7 +91,7 @@ p{
     padding: 1rem;
 }
 
-.gallery__content form input{
+.gallery__content form input {
     border: 0px;
     height: 35px;
     border-style: none;
@@ -85,10 +99,9 @@ p{
     padding: 1rem;
     font-size: 1.2rem;
     background: #eee;
+}
 
-}   
-
-.gallery__content form input:focus{
+.gallery__content form input:focus {
     outline: none;
 }
 
@@ -96,12 +109,12 @@ p{
     width: 100%;
     height: 100%;
     box-sizing: border-box;
-    padding: .8rem .8rem;
+    padding: 0.8rem 0.8rem;
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-gap: .8rem;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-gap: 0.2rem;
     justify-content: center;
     align-items: center;
-	object-fit: cover;
+    object-fit: cover;
 }
 </style>
